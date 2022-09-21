@@ -21,6 +21,7 @@ class Post
      * @param $excerpt
      * @param $date
      * @param $body
+     * @param $url
      */
     public function __construct($title, $excerpt, $date, $body, $url)
     {
@@ -50,7 +51,15 @@ class Post
 
     public static function find($uri)
     {
-        $posts = static::all();
-        return $posts->firstWhere('url', $uri);
+        return static::all()->firstWhere('url', $uri);
+    }
+
+    public static function findOrFail($uri)
+    {
+        if (!$post = static::find($uri)) {
+            throw new ModelNotFoundException;
+        }
+
+        return$post;
     }
 }
