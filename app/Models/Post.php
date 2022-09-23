@@ -2,64 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\File;
-use PhpParser\Node\Stmt\Static_;
-use PhpParser\PrettyPrinter\Standard;
-use Spatie\YamlFrontMatter\YamlFrontMatter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Post
+class Post extends Model
 {
-    public $title;
-    public $excerpt;
-    public $date;
-    public $body;
-    public $url;
+    use HasFactory;
 
-    /**
-     * @param $title
-     * @param $excerpt
-     * @param $date
-     * @param $body
-     * @param $url
-     */
-    public function __construct($title, $excerpt, $date, $body, $url)
+    protected $guarded = [];
+
+//    protected $with = ['category', 'author']; //This will eager load the relationships every time you fetch a post
+//    protected $fillable = ['title', 'excerpt', 'body'];
+
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        $this->title = $title;
-        $this->excerpt = $excerpt;
-        $this->date = $date;
-        $this->body = $body;
-        $this->url = $url;
+        return $this->belongsTo(Category::class);
     }
 
-
-    public static function all()
+    public function author(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return cache()->rememberForever('posts.all', function () {
-            return collect(File::files(resource_path("posts")))
-                ->map(fn($file) => YamlFrontMatter::parseFile($file))
-                ->map(fn($document) => new Post(
-                    $document->title,
-                    $document->excerpt,
-                    $document->date,
-                    $document->body(),
-                    $document->url
-                ))
-                ->sortByDesc('date');
-        });
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public static function find($uri)
-    {
-        return static::all()->firstWhere('url', $uri);
-    }
-
-    public static function findOrFail($uri)
-    {
-        if (!$post = static::find($uri)) {
-            throw new ModelNotFoundException;
-        }
-
-        return$post;
-    }
+//    public static function create(array $attributes)
+//    {
+//        $p = new Post($attributes);
+//        $p->save();
+//    }
 }
