@@ -19,7 +19,13 @@
 
     <div x-show="show" class="py-2 absolute bg-gray-100 w-full mt-2 rounded-xl overflow-auto max-h-52" style="display: none">
         @foreach( DB::table('categories')->get() as $category)
-            <a href="/categories/{{$category->slug}}" class="block text-left px-3 text-s leading-6 hover:bg-gray-300" >{{$category->name}}</a>
+            <a
+                href="/?category={{$category->slug}}&search={{request('search')}}"
+                class="block text-left px-3 text-s leading-6 hover:bg-gray-300"
+{{--                :active={{request('$category')==$category->slug}}--}}
+            >
+                {{$category->name}}
+            </a>
         @endforeach
     </div>
 </div>
