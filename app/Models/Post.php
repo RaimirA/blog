@@ -24,6 +24,11 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public  function comments()
+    {
+        return$this->hasMany(Comment::class)->latest();
+    }
+
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, fn($query, $search) =>

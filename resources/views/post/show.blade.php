@@ -49,6 +49,32 @@
                     {{$post->body}}
                 </div>
             </div>
+
+            <section class="col-span-8 col-start-5 mt=10">
+                <form method="POST" action="/posts/{{$post->slug}}/comments" class="border border-gray-200 p-6 rounded-xl mb-10">
+                    @csrf
+                    <header class="flex items-center">
+                        <img src="https://i.pravatar.cc/60?u={{auth()->id()}}" alt="" width="60" height="60" class="rounded-xl">
+                        <h2 class="ml-4">Want to participate?</h2>
+                    </header>
+
+                    <div class="mt-3">
+                        <textarea name="body"
+                                  id=""
+                                  class="w-full text-sm focus:outline-none focus:ring"
+                                  cols="30" rows="10"
+                                  placeholder="Write your comment here"
+                                  required></textarea>
+
+                        <x-error name="body"/>
+                    </div>
+
+                    <x-button/>
+                </form>
+                @foreach($post->comments as $comment)
+                    <x-post-comment :comment="$comment"/>
+                @endforeach
+            </section>
         </article>
     </main>
 

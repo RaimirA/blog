@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/valet": "^3.1",
+        "mailchimp/marketing": "^3.0",
         "spatie/yaml-front-matter": "^2.0"
     },
     "require-dev": {
